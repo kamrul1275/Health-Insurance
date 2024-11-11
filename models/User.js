@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const bcrypt = require('bcryptjs');
+const Role = require('./Role');
 
 const User = sequelize.define('User', {
     name: {
@@ -41,19 +42,19 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    // New field to store the user's token
-
+    roleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Role,
+            key: 'id'
+        }
+    }
 }, {
     timestamps: true,  // Enable timestamps
 });
 
-// // Sync the model with the database
-// sequelize.sync()
-//     .then(() => {
-//         console.log('User table has been created.');
-//     })
-//     .catch(error => {
-//         console.error('Unable to create table : ', error);
-//     });
+User.belongsTo(Role, { foreignKey: 'roleId' });
+Role.hasMany(User, { foreignKey: 'roleId' });
 
 module.exports = User;

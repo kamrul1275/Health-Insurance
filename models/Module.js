@@ -2,8 +2,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const Role = sequelize.define('Role', {
-    roleName: {
+const Module = sequelize.define('Module', {
+    moduleName: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
@@ -19,13 +19,13 @@ const Role = sequelize.define('Role', {
 
 sequelize.sync()
     .then(() => {
-        console.log('Role table has been created.');
+        console.log('Module table has been created.');
     })
     .catch(error => {
         console.error('Unable to create table : ', error);
     });
 
-module.exports = Role;
+module.exports = Module;
 
 
 
