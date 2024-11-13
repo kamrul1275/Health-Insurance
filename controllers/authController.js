@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Role = require('../models/Role');
+const Module = require('../models/Module');
+const Permission = require('../models/Permission');
 const { Op } = require('sequelize');// Adjust the path as necessary
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -64,8 +67,62 @@ exports.register = async (req, res) => {
 
 // Define the login function
 
-exports.login = async (req, res) => {
+// exports.login = async (req, res) => {
 
+//     const { email, password } = req.body;
+
+//     // Validate input data
+//     if (!email || !password) {
+//         return res.status(400).json({ message: 'Please provide all required fields' });
+//     }
+
+//     try {
+//         // Check if the user exists
+//         const user = await User.findOne({ where: { email } });
+//         if (!user) {
+//             return res.status(400).json({ message: 'Invalid credentials' });
+//         }
+
+//         // Check if the password is correct
+//         const isMatch = await bcrypt.compare(password, user.password);
+//         if (!isMatch) {
+//             return res.status(400).json({ message: 'Invalid credentials' });
+//         }
+
+//         // Create a token
+//         const payload = {
+//             user: {
+//                 id: user.id,
+//                 role_type: user.role_type // Include role_type in the payload
+//             },
+
+
+
+//         };
+
+
+
+
+
+//         jwt.sign(payload, process.env.JWT_PRIVATE_KEY, { expiresIn: '1h' }, (error, token) => {
+
+//             if (error) throw error;
+
+//             res.status(200).json({
+//                 message: 'Login Successfully',
+//                 success: true,
+//                 token: token,
+//                 role_type: user.role_type
+//             });
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// };//end of login function
+
+
+exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     // Validate input data
@@ -86,6 +143,34 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
+        let role = null;
+        let permissions = [];
+
+        // Fetch the user's role and permissions if the user has a role ID
+        if (user.roleId) {
+            role = await Role.findOne({ where: { id: user.roleId } });
+            permissions = await Permission.findAll({
+                where: { roleId: user.roleId },
+                include: [
+                    {
+                        model: Module,
+                        as: 'module',
+                        attributes: ['moduleName'] // Adjust the attribute name as per your Module model
+                    },
+                    {
+                        model: Role,
+                        as: 'role',
+                        attributes: ['roleName'] // Adjust the attribute name as per your Role model
+                    },
+                    {
+                        model: User,
+                        as: 'createByUser',
+                        attributes: ['name'] // Adjust the attribute name as per your User model
+                    }
+                ]
+            });
+        }
+
         // Create a token
         const payload = {
             user: {
@@ -94,27 +179,25 @@ exports.login = async (req, res) => {
             }
         };
 
-
-
-
-
         jwt.sign(payload, process.env.JWT_PRIVATE_KEY, { expiresIn: '1h' }, (error, token) => {
-
             if (error) throw error;
 
             res.status(200).json({
                 message: 'Login Successfully',
                 success: true,
                 token: token,
-                role_type: user.role_type
+                role: role ? {
+                    id: role.id,
+                    roleName: role.roleName
+                } : null,
+                permissions: permissions
             });
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
-};//end of login function
-
+};
 // Define the dashboard function
 
 // Define the getUsers function

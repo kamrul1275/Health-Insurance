@@ -2,23 +2,45 @@ const express = require('express');
 const router = express.Router();
 const Permission = require('../models/Permission');
 
+const Module = require('../models/Module');
+const User = require('../models/User');
+const Role = require('../models/Role');
+
 const { Op } = require('sequelize');// Adjust the path as necessary
+// const Module = require('../models/Module');
 require('dotenv').config();
 
 
 const roles = []; // This will act as our in-memory database for roles
 
-// Get all roles
+// Get all permission
+
 exports.getPermissions = async (req, res) => {
     try {
-        const Permissions = await Permission.findAll();
-        res.status(200).json(Permissions);
+        const permissions = await Permission.findAll({
+            include: [
+                {
+                    model: Module,
+                    as: 'module',
+                    attributes: ['moduleName'] // Adjust the attribute name as per your Module model
+                },
+                {
+                    model: Role,
+                    as: 'role',
+                    attributes: ['roleName'] // Adjust the attribute name as per your Role model
+                },
+                {
+                    model: User,
+                    as: 'createByUser',
+                    attributes: ['name'] // Adjust the attribute name as per your User model
+                }
+            ]
+        });
+        res.status(200).json(permissions);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
     }
-
-
 };
 
 
@@ -26,21 +48,28 @@ exports.getPermissions = async (req, res) => {
 
 // Create a new permission
 exports.createPermission = async (req, res) => {
-    const { permissionName } = req.body;
-    console.log("permissionName ...", permissionName);
+    const { canCreate, canGetList, canGetOne, canUpdate, canDelete, createBy, roleId, moduleId } = req.body;
+    console.log("Creating permission with data:", req.body);
     try {
-        const permission = await Permission.create({ permissionName }); // Include userId
+        const permission = await Permission.create({
+            canCreate,
+            canGetList,
+            canGetOne,
+            canUpdate,
+            canDelete,
+            createBy,
+            roleId,
+            moduleId
+        });
         res.status(201).json({
-
             message: 'Permission created successfully',
-            permissionName: permission
-        }); // Include role
+            permission
+        });
     } catch (error) {
         console.log(error);
         res.status(400).json({ error: error.message });
     }
 };
-
 
 // Get a role by ID
 exports.getPermissionById = async (req, res) => {

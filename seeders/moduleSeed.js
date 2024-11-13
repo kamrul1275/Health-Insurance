@@ -7,20 +7,20 @@ module.exports = {
     up: async (queryInterface, Sequelize) => {
         await Module.bulkCreate([
             {
-                moduleName: 'Category One', // You can modify this as needed
-                creatby: 'Admin', // You can modify this as needed
+                moduleName: 'Module One', // You can modify this as needed
+                createby: 'Admin', // You can modify this as needed
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
-                moduleName: 'Category Two',
-                creatby: 'Admin',
+                moduleName: 'Module Two',
+                createby: 'Admin',
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
-                moduleName: 'Category Three',
-                creatby: 'Admin',
+                moduleName: 'Module Three',
+                createby: 'Admin',
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },

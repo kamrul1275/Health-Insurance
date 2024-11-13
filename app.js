@@ -1,5 +1,14 @@
 const express = require('express');
 const { Pool } = require('pg');
+const sequelize = require('./config/db'); // Adjust the path as necessary
+const User = require('./models/User'); // Adjust the path as necessary
+const Role = require('./models/Role'); // Adjust the path as necessary
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Define associations
+User.associate({ Role });
+Role.associate({ User });
 // const authRoute = require('./routes/authRoutes');
 
 const authRoute = require('./routes/authRoutes');
@@ -12,10 +21,8 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer();
 
-const app = express();
-const port = process.env.PORT || 3000;
 
-const sequelize = require('./config/db');
+// const sequelize = require('./config/db');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,17 +44,18 @@ app.use('/api', permissionRoute);
 
 
 
-// Start server
-const server = app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+// Sync the database
+sequelize.sync({ force: false }) // Set force to true to drop and recreate tables on every sync
+    .then(() => {
+        console.log('Database & tables created!');
+    })
+    .catch(err => {
+        console.error('Unable to create tables:', err);
+    });
 
-// Handle EADDRINUSE error
-server.on('error', (error) => {
-    if (error.code === 'EADDRINUSE') {
-        console.error(`Port ${port} is already in use. Please use a different port.`);
-        process.exit(1);
-    } else {
-        throw error;
-    }
+// Start the server
+
+// const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

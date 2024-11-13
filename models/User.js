@@ -1,7 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
-const bcrypt = require('bcryptjs');
-const Role = require('./Role');
 
 const User = sequelize.define('User', {
     name: {
@@ -44,9 +42,9 @@ const User = sequelize.define('User', {
     },
     roleId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
-            model: Role,
+            model: 'Roles',  // Use the table name as a string to avoid circular dependency
             key: 'id'
         }
     }
@@ -54,7 +52,10 @@ const User = sequelize.define('User', {
     timestamps: true,  // Enable timestamps
 });
 
-User.belongsTo(Role, { foreignKey: 'roleId' });
-Role.hasMany(User, { foreignKey: 'roleId' });
+// Define associations in a function
+User.associate = function (models) {
+    User.belongsTo(models.Role, { foreignKey: 'roleId' });
+    models.Role.hasMany(User, { foreignKey: 'roleId' });
+};
 
 module.exports = User;

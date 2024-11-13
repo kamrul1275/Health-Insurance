@@ -1,6 +1,7 @@
 
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const User = require('./User');
 
 const Module = sequelize.define('Module', {
     moduleName: {
@@ -8,22 +9,32 @@ const Module = sequelize.define('Module', {
         allowNull: false,
         unique: true
     },
-    creatby: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: false
-    },
+    createBy: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'Users',  // Use the table name as a string to avoid circular dependency
+            key: 'id'
+        }
+    }
 }, {
     timestamps: true,  // Enable timestamps
 });
 
-sequelize.sync()
-    .then(() => {
-        console.log('Module table has been created.');
-    })
-    .catch(error => {
-        console.error('Unable to create table : ', error);
-    });
+
+User.hasMany(Module, { foreignKey: 'CreateBy' });
+Module.belongsTo(User, { foreignKey: 'CreateBy' });
+
+
+
+
+// sequelize.sync()
+//     .then(() => {
+//         console.log('Module table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table : ', error);
+//     });
 
 module.exports = Module;
 

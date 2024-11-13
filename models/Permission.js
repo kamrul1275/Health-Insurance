@@ -3,6 +3,7 @@ const sequelize = require('../config/db');
 
 const Role = require('./Role');
 const Module = require('./Module');
+const User = require('./User');
 
 
 const Permission = sequelize.define('Permission', {
@@ -12,37 +13,39 @@ const Permission = sequelize.define('Permission', {
         autoIncrement: true,
     },
     canCreate: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
-        unique: true,
+        unique: false,
     },
     canGetList: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
-        unique: true,
+        unique: false,
     },
     canGetOne: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-
-    canUpdate: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-    canDelete: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-    creatby: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false,
     },
 
+    canUpdate: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false,
+    },
+    canDelete: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false,
+    },
+    createBy: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id'
+        }
+    },
 
 
     roleId: {
@@ -67,22 +70,29 @@ const Permission = sequelize.define('Permission', {
     timestamps: true,  // Enable timestamps
 });
 
-Role.hasMany(Permission, { foreignKey: 'roleId' });
-Permission.belongsTo(Role, { foreignKey: 'roleId' });
+// Permission model
+Permission.belongsTo(Module, { as: 'module', foreignKey: 'moduleId' });
+Permission.belongsTo(Role, { as: 'role', foreignKey: 'roleId' });
+Permission.belongsTo(User, { as: 'createByUser', foreignKey: 'createBy' });
 
-Module.hasMany(Permission, { foreignKey: 'moduleId' });
-Permission.belongsTo(Module, { foreignKey: 'moduleId' });
+// Module model
+Module.hasMany(Permission, { as: 'permissions', foreignKey: 'moduleId' });
 
+// Role model
+Role.hasMany(Permission, { as: 'permissions', foreignKey: 'roleId' });
+
+// User model
+User.hasMany(Permission, { as: 'createdPermissions', foreignKey: 'createBy' });
 
 
 
 // Sync the model with the database
-sequelize.sync()
-    .then(() => {
-        console.log('Permission table has been created.');
-    })
-    .catch(error => {
-        console.error('Unable to create table : ', error);
-    });
+// sequelize.sync()
+//     .then(() => {
+//         console.log('Permission table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table : ', error);
+//     });
 
 module.exports = Permission;

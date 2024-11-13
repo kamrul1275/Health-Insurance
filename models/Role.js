@@ -1,4 +1,3 @@
-
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
@@ -8,35 +7,22 @@ const Role = sequelize.define('Role', {
         allowNull: false,
         unique: true
     },
-    creatby: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: false
-    },
+    createBy: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'Users',  // Use the table name as a string to avoid circular dependency
+            key: 'id'
+        }
+    }
 }, {
     timestamps: true,  // Enable timestamps
 });
 
-sequelize.sync()
-    .then(() => {
-        console.log('Role table has been created.');
-    })
-    .catch(error => {
-        console.error('Unable to create table : ', error);
-    });
+// Define associations in a function
+Role.associate = function (models) {
+    Role.belongsTo(models.User, { foreignKey: 'createBy' });
+    models.User.hasMany(Role, { foreignKey: 'createBy' });
+};
 
 module.exports = Role;
-
-
-
-
-
-// Sync the model with the database
-// sequelize.sync()
-//     .then(() => {
-//         console.log('Role table has been created.');
-//     })
-//     .catch(error => {
-//         console.error('Unable to create table : ', error);
-//     });
-
