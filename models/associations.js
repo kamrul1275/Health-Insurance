@@ -1,5 +1,8 @@
-// const User = require('./User');
-// const Role = require('./Role');
+const Branch = require('./Branch');
+const Member = require('./Member');
 
-// User.hasMany(Role, { foreignKey: 'creatBy' });
-// Role.belongsTo(User, { foreignKey: 'creatBy' });
+// Define relationships
+Branch.hasMany(Member, { foreignKey: 'branch_id' });
+Member.belongsTo(Branch, { foreignKey: 'branch_id' });
+
+module.exports = { Branch, Member };

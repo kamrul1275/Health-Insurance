@@ -3,6 +3,8 @@ const { Pool } = require('pg');
 const sequelize = require('./config/db'); // Adjust the path as necessary
 const User = require('./models/User'); // Adjust the path as necessary
 const Role = require('./models/Role'); // Adjust the path as necessary
+const { Branch, Member } = require('./models/associations');  // Import associations
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -15,6 +17,8 @@ const authRoute = require('./routes/authRoutes');
 const userRoute = require('./routes/userRoutes');
 const roleRoute = require('./routes/roleRoutes');
 const permissionRoute = require('./routes/permissionRoutes');
+const branchRoute = require('./routes/branchRoutes');
+const memberRoute = require('./routes/memberRoutes');
 
 
 const bodyParser = require('body-parser');
@@ -42,16 +46,20 @@ app.use('/api', roleRoute);
 // permission routes
 app.use('/api', permissionRoute);
 
+app.use('/api', branchRoute);
+
+app.use('/api', memberRoute);
+
 
 
 // Sync the database
-sequelize.sync({ force: false }) // Set force to true to drop and recreate tables on every sync
-    .then(() => {
-        console.log('Database & tables created!');
-    })
-    .catch(err => {
-        console.error('Unable to create tables:', err);
-    });
+// sequelize.sync({ force: false }) // Set force to true to drop and recreate tables on every sync
+//     .then(() => {
+//         console.log('Database & tables created!');
+//     })
+//     .catch(err => {
+//         console.error('Unable to create tables:', err);
+//     });
 
 // Start the server
 
