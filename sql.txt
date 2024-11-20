@@ -1,0 +1,1 @@
+police= INSERT INTO policies (product_id,product_name)values('3','productThree');

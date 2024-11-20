@@ -19,6 +19,9 @@ const roleRoute = require('./routes/roleRoutes');
 const permissionRoute = require('./routes/permissionRoutes');
 const branchRoute = require('./routes/branchRoutes');
 const memberRoute = require('./routes/memberRoutes');
+const policyRoute = require('./routes/policyRoutes');
+const categoryRoute = require('./routes/categoryRoutes');
+
 
 
 const bodyParser = require('body-parser');
@@ -49,17 +52,19 @@ app.use('/api', permissionRoute);
 app.use('/api', branchRoute);
 
 app.use('/api', memberRoute);
+app.use('/api', policyRoute);
+app.use('/api', categoryRoute);
 
 
 
 // Sync the database
-// sequelize.sync({ force: false }) // Set force to true to drop and recreate tables on every sync
-//     .then(() => {
-//         console.log('Database & tables created!');
-//     })
-//     .catch(err => {
-//         console.error('Unable to create tables:', err);
-//     });
+sequelize.sync({ force: false }) // Set force to true to drop and recreate tables on every sync
+    .then(() => {
+        console.log('Database & tables created!');
+    })
+    .catch(err => {
+        console.error('Unable to create tables:', err);
+    });
 
 // Start the server
 
