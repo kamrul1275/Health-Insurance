@@ -1,11 +1,12 @@
 
 Branch = INSERT INTO branches (branch_code)values('kh5001');
 
-Member = INSERT INTO members (member_name,contact_no,nomine_gender,branch_id)values('adil','01893335','male','1');
+Member = INSERT INTO members (member_name,contact_no,nomine_gender,date_birthday,branch_id)values('adil','01893335','male','12-102-1997','1');
 
-Category = INSERT INTO categories (title,insurance,premium_installment,policy_tenure)values('title three','three','4343','90');
 
-police= INSERT INTO policies (product_id,product_name, category_id)values('3','productThree','1');
+Category = INSERT INTO categories (title,insurance,premium_installment,policy_tenure)values('Momota-CAT-1','680.00','12','90');
+
+police= INSERT INTO policies (product_id,product_name, category_id)values('1','Momota Shastho Bima','1');
 
 
 
