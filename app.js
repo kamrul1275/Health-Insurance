@@ -21,6 +21,9 @@ const branchRoute = require('./routes/branchRoutes');
 const memberRoute = require('./routes/memberRoutes');
 const policyRoute = require('./routes/policyRoutes');
 const categoryRoute = require('./routes/categoryRoutes');
+const idtypeRoutes = require('./routes/idtypeRoutes');
+const relationdataRoutes = require('./routes/relationdataRoutes');
+const healthInsuranceRoute = require('./routes/healthInsuranceRoutes');
 
 
 
@@ -55,16 +58,17 @@ app.use('/api', memberRoute);
 app.use('/api', policyRoute);
 app.use('/api', categoryRoute);
 
+// IdTypen Routes
+app.use('/api', idtypeRoutes);   
 
 
-// Sync the database
-sequelize.sync({ force: false }) // Set force to true to drop and recreate tables on every sync
-    .then(() => {
-        console.log('Database & tables created!');
-    })
-    .catch(err => {
-        console.error('Unable to create tables:', err);
-    });
+// Relation Routes
+app.use('/api', relationdataRoutes);
+
+//Health Insurance 
+app.use('/api', healthInsuranceRoute);
+
+
 
 // Start the server
 

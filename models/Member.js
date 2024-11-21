@@ -24,13 +24,17 @@ const Member = sequelize.define('members', {
         allowNull: false,
         validate: {
             isIn: {
-                args: [['Male', 'Female', 'Other']],  // Valid options for gender
-                msg: "Nominee gender must be one of the following: Male, Female, Other."
+                args: [['male:1', 'female:0']],  // Valid options for gender
+                msg: "Nominee gender must be one of the following: Male=1, Female=0."
             },
             notEmpty: {
                 msg: "Nominee gender cannot be empty."
             }
         }
+    },
+    date_birthday: {
+        type: DataTypes.DATE,
+        allowNull: false,
     },
     branch_id: {
         type: DataTypes.INTEGER,

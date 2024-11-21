@@ -1,1 +1,25 @@
+
+Branch = INSERT INTO branches (branch_code)values('kh5001');
+
+Member = INSERT INTO members (member_name,contact_no,nomine_gender,branch_id)values('adil','01893335','male','1');
+
+Category = INSERT INTO categories (title,insurance,premium_installment,policy_tenure)values('title three','three','4343','90');
+
 police= INSERT INTO policies (product_id,product_name)values('3','productThree');
+
+
+Id type =   INSERT INTO idtypes (data_id,data_name,data_type)values('1','data one', 'cardTypeId');
+
+
+SELECT * FROM idtypes where data_type='cardTypeId'
+
+
+SELECT * FROM idtypes where data_type='cardTypeId'
+SELECT data_id,data_name FROM idtypes where data_type='cardTypeId'
+
+
+
+Relation =   SELECT data_id,data_name FROM idtypes where data_type='relationshipId'
+SELECT data_id,data_name FROM relationdata where data_type='relationshipId'
+
+Inser Relation:   INSERT INTO relationdata (data_id,data_name,data_type)values('1','data one', 'relationshipId');
