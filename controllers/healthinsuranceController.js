@@ -9,18 +9,34 @@ require('dotenv').config();
 
  const health_insurances = []; // This will act as our in-memory database for roles
 
-// Get all roles
+// Get all Health Insurance data
 exports.getHealthInsurance = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+
     try {
-        const health_insurances = await HealthInsurance.findAll();
-        res.status(200).json(health_insurances);
+        const offset = (page - 1) * limit;
+        const health_insurances = await HealthInsurance.findAll({
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+        });
+
+        const totalItems = await HealthInsurance.count();
+        const totalPages = Math.ceil(totalItems / limit);
+
+        res.status(200).json({
+            data: health_insurances,
+            pagination: {
+                totalItems,
+                totalPages,
+                currentPage: parseInt(page),
+                itemsPerPage: parseInt(limit)
+            }
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
     }
-
-};// end getHealthInsurance
-
+};
 
 
 

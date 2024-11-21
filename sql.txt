@@ -5,7 +5,8 @@ Member = INSERT INTO members (member_name,contact_no,nomine_gender,branch_id)val
 
 Category = INSERT INTO categories (title,insurance,premium_installment,policy_tenure)values('title three','three','4343','90');
 
-police= INSERT INTO policies (product_id,product_name)values('3','productThree');
+police= INSERT INTO policies (product_id,product_name, category_id)values('3','productThree','1');
+
 
 
 Id type =   INSERT INTO idtypes (data_id,data_name,data_type)values('1','data one', 'cardTypeId');
@@ -23,3 +24,26 @@ Relation =   SELECT data_id,data_name FROM idtypes where data_type='relationship
 SELECT data_id,data_name FROM relationdata where data_type='relationshipId'
 
 Inser Relation:   INSERT INTO relationdata (data_id,data_name,data_type)values('1','data one', 'relationshipId');
+
+
+
+
+
+
+
+
+
+
+
+table name is health_insursnce,  here is field name branchcode, member_name  cono,  orgno,  orgmemno, enrolment_id, any_disease,  insurance_policy_id, insurance_type_id, category_id, premium_amnt, insurance_tenure, insurance_policy_no, nominee_name, nomine_phone_no,  nominee_birthday,  nominee_typeof_card_id,  nominee_card_id,  nominee_relation_id, status, erp_member_id, project_code, contact_no,  nominee_id_fornt, nominee_id_back, card_issue_country,  card_issue_date, card_expiry_date, demarks     
+
+every field must be nullable
+
+i want to raw sql queary beause i want to create table. 
+
+
+and need model name health_insursnce, i am using node js, sequlize model
+
+
+
+

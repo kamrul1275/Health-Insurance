@@ -6,6 +6,8 @@ const Role = require('./models/Role'); // Adjust the path as necessary
 const { Branch, Member } = require('./models/associations');  // Import associations
 
 const app = express();
+const cors = require("cors");
+app.use(cors());  // This allows all origins
 const PORT = process.env.PORT || 3000;
 
 // Define associations
