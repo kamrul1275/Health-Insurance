@@ -23,12 +23,12 @@ const RelationData = sequelize.define('relationdata', {
     timestamps: false
 });
 
-sequelize.sync({ force: true })
-    .then(() => {
-        console.log('Relation table has been created.');
-    })
-    .catch(error => {
-        console.error('Unable to create table:', error);
-    });
+// sequelize.sync({ force: true })
+//     .then(() => {
+//         console.log('Relation table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table:', error);
+//     });
 
 module.exports = RelationData;

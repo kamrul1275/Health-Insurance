@@ -45,7 +45,7 @@ module.exports = Module;
 // Sync the model with the database
 // sequelize.sync()
 //     .then(() => {
-//         console.log('Role table has been created.');
+//         console.log('Module table has been created.');
 //     })
 //     .catch(error => {
 //         console.error('Unable to create table : ', error);

@@ -11,8 +11,8 @@ Member.belongsTo(Branch, { foreignKey: 'branch_id' });
 
 
 // Define relationships
-Category.hasMany(Policy, { foreignKey: 'category_id' });
-Policy.belongsTo(Category, { foreignKey: 'category_id' });
+Policy.hasMany(Category, { foreignKey: 'policy_id' });
+Category.belongsTo(Policy, { foreignKey: 'policy_id' });
 
 
 

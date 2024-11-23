@@ -15,4 +15,17 @@ const Branch = sequelize.define('branches', {
     timestamps: false
 });
 
+
+
+// create database table
+
+// sequelize.sync({ force: true })
+//     .then(() => {
+//         console.log('Branch table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table:', error);
+//     });
+
+
 module.exports = Branch;

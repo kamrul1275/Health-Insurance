@@ -11,6 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 router.get('/category', categoryController.getCategory);  
-// router.get('/branch/:branch_code/member/name', branchController.getMemberNameByBranchCode);  // Updated route
+// router.get('/category/:policy_id', categoryController.getCategoryWithPolicyId);
 
+// Updated route for getCategoryWithPolicyId
+router.get('/category/:policy_id', categoryController.getCategoryWithPolicyId);
 module.exports = router;

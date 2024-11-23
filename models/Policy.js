@@ -11,15 +11,19 @@ const Policy = sequelize.define('policies', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    category_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: 'Category',
-            key: 'id'
-        }
-    }
 }, {
     timestamps: false
 });
+
+
+// create database table
+
+// sequelize.sync({ force: true })
+//     .then(() => {
+//         console.log('Policy table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table:', error);
+//     });
 
 module.exports = Policy;

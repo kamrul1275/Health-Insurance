@@ -48,4 +48,14 @@ const Member = sequelize.define('members', {
     timestamps: false,  // Disable timestamps
 });
 
+// create database table
+
+// sequelize.sync({ force: true })
+//     .then(() => {
+//         console.log('Category table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table:', error);
+//     });
+
 module.exports = Member;
