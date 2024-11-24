@@ -95,11 +95,11 @@ const HealthInsurance = sequelize.define('health_insurance', {
         allowNull: true
     },
     nominee_id_front: {
-        type: DataTypes.STRING,
+        type: DataTypes.BLOB('long'), // Store image buffer
         allowNull: true
     },
     nominee_id_back: {
-        type: DataTypes.STRING,
+        type: DataTypes.BLOB('long'), // Store image buffer
         allowNull: true
     },
     card_issue_country: {
@@ -123,29 +123,14 @@ const HealthInsurance = sequelize.define('health_insurance', {
     tableName: 'health_insurance'
 });
 
-// Add a static method to update the model
-HealthInsurance.updateInsurance = async function (id, updatedData) {
-    try {
-        const record = await this.findByPk(id);
-        if (!record) {
-            throw new Error('Record not found');
-        }
-        await record.update(updatedData);
-        return record;
-    } catch (error) {
-        throw error;
-    }
-};
 
 
-// Sync the database
-sequelize.sync({ force: false }) // Set force to true to drop and recreate tables on every sync
+sequelize.sync({ force: true })
     .then(() => {
-        console.log('Database & tables created!');
+        console.log('Health table has been created.');
     })
-    .catch(err => {
-        console.error('Unable to create tables:', err);
+    .catch(error => {
+        console.error('Unable to create table:', error);
     });
-
 
 module.exports = HealthInsurance;

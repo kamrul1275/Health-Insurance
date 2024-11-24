@@ -4,8 +4,17 @@ const sequelize = require('./config/db'); // Adjust the path as necessary
 const User = require('./models/User'); // Adjust the path as necessary
 const Role = require('./models/Role'); // Adjust the path as necessary
 const { Branch, Member } = require('./models/associations');  // Import associations
+const multer = require('multer');
+const bodyParser = require("body-parser");
 
 const app = express();
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
+
 const cors = require("cors");
 app.use(cors());  // This allows all origins
 const PORT = process.env.PORT || 3000;
@@ -29,16 +38,8 @@ const healthInsuranceRoute = require('./routes/healthInsuranceRoutes');
 
 
 
-const bodyParser = require('body-parser');
-const multer = require('multer');
-const upload = multer();
 
 
-// const sequelize = require('./config/db');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(upload.none()); // To handle form-data
 
 
 // User Authentication

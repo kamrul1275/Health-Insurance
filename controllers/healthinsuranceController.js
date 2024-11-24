@@ -1,10 +1,28 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const HealthInsurance = require('../models/HealthInsurance');
-// const Member = require('../models/Member');
-
 const { Op } = require('sequelize');// Adjust the path as necessary
 require('dotenv').config();
+
+
+
+
+// Middleware to parse JSON and form data
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// Set up multer for file handling
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./uploads"); // Save files in the 'uploads' directory
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Rename file
+    },
+});
+
+const upload = multer({ storage: storage });
 
 
  const health_insurances = []; // This will act as our in-memory database for roles
@@ -38,76 +56,83 @@ exports.getHealthInsurance = async (req, res) => {
     }
 };
 
-
-
-// Define the health_insurance function
-
-// const HealthInsurance = require('../models/HealthInsurance'); // Adjust the path as necessary
-
 exports.storeHealthInsurance = async (req, res) => {
-    const { ApiKey, BranchCode, HealthInsuranceJson } = req.body;
-    
-    // Handle image file paths
-    const nomineeImageFront = req.files && req.files['nomineeImageFront'] 
-        ? req.files['nomineeImageFront'][0].path 
-        : null;
-    const nomineeImageBack = req.files && req.files['nomineeImageBack'] 
-        ? req.files['nomineeImageBack'][0].path 
-        : null;
-
-    console.log("req.body...", req.body);
-    console.log("req.files...", req.files);
-    console.log("nomineeImageFront...", nomineeImageFront);
-    console.log("nomineeImageBack...", nomineeImageBack);
-
-    // Validate required fields
-    if (!ApiKey || !BranchCode || !HealthInsuranceJson || !Array.isArray(HealthInsuranceJson)) {
-        return res.status(400).json({ message: 'Please provide all required fields' });
-    }
-
     try {
-        // Iterate over each insurance data object
-        for (const insuranceData of HealthInsuranceJson) {
-            await HealthInsurance.create({
-                branchcode: BranchCode,
-                member_name: insuranceData.NomineeName,
-                cono: insuranceData.CoNo,
-                orgno: insuranceData.OrgNo,
-                orgmemno: insuranceData.OrgMemNo,
-                enrolment_id: insuranceData.EnrollId,
-                any_disease: insuranceData.AnyDisese,
-                insurance_policy_id: insuranceData.PolicyName,
-                insurance_type_id: insuranceData.InsuranceType,
-                category_id: insuranceData.Category,
-                premium_amnt: insuranceData.PremiumAmount,
-                insurance_tenure: insuranceData.Duration,
-                insurance_policy_no: insuranceData.PolicyName,
-                nominee_name: insuranceData.NomineeName,
-                nomine_phone_no: insuranceData.NomineePhone,
-                nominee_birthday: insuranceData.NomineeDOB,
-                nominee_typeof_card_id: insuranceData.NomineeIDType,
-                nominee_card_id: insuranceData.NomineeIDNumber,
-                nominee_relation_id: insuranceData.NomineeRelation,
-                status: 'active', // Assuming a default status
-                erp_member_id: insuranceData.ErpMemId,
-                project_code: insuranceData.ProjectCode,
-                contact_no: insuranceData.Phone,
-                nomineeImageFront: nomineeImageFront, // Path to the uploaded front image
-                nomineeImageBack: nomineeImageBack, // Path to the uploaded back image
-                card_issue_country: insuranceData.NomineeIDPlaceOfIssue,
-                card_issue_date: insuranceData.NomineeIDIssueDate,
-                card_expiry_date: insuranceData.NomineeIDExpiryDate,
-                demarks: '' // Assuming no remarks provided
-            });
+        const {
+            ApiKey,
+            BranchCode,
+            Member_name,
+            HealthInsuranceJson,
+        } = req.body;
+
+        // Debug uploaded files
+        console.log("Uploaded files:", req.files);
+
+        // Files uploaded
+        const nomineeImageFront = req.files.nomineeImageFront
+            ? req.files.nomineeImageFront[0] // Get the file object directly
+            : null;
+        const nomineeImageBack = req.files.nomineeImageBack
+            ? req.files.nomineeImageBack[0] // Get the file object directly
+            : null;
+
+        // Log file buffers only if they exist
+        if (nomineeImageFront) {
+            console.log("Front Image Size:", nomineeImageFront.size);
+        } else {
+            console.log("No Front Image Uploaded");
         }
 
-        // Send success response after inserting all items
+        if (nomineeImageBack) {
+            console.log("Back Image Size:", nomineeImageBack.size);
+        } else {
+            console.log("No Back Image Uploaded");
+        }
+
+        // Parse the JSON string
+        const healthInsuranceData = JSON.parse(HealthInsuranceJson);
+
+        // Iterate over the HealthInsuranceJson array and insert each entry
+        const healthInsuranceRecords = await Promise.all(
+            healthInsuranceData.map(async (data) => {
+                return HealthInsurance.create({
+                    branchcode: BranchCode,
+                    member_name: Member_name,
+                    cono: data.CoNo,
+                    orgno: data.OrgNo,
+                    orgmemno: data.OrgMemNo,
+                    enrolment_id: data.EnrollId,
+                    any_disease: data.AnyDisese,
+                    insurance_policy_id: data.PolicyName,
+                    insurance_type_id: data.InsuranceType,
+                    category_id: data.Category,
+                    premium_amnt: data.PremiumAmount,
+                    insurance_tenure: data.Duration,
+                    nominee_name: data.NomineeName,
+                    nomine_phone_no: data.NomineePhone,
+                    nominee_birthday: data.NomineeDOB,
+                    nominee_typeof_card_id: data.NomineeIDType,
+                    nominee_card_id: data.NomineeIDNumber,
+                    nominee_relation_id: data.NomineeRelation,
+                    erp_member_id: data.ErpMemId,
+                    project_code: data.ProjectCode,
+                    contact_no: data.Phone,
+                    nominee_id_front: nomineeImageFront ? nomineeImageFront.buffer : null, // Save image buffer
+                    nominee_id_back: nomineeImageBack ? nomineeImageBack.buffer : null, // Save image buffer
+                    card_issue_country: data.NomineeIDPlaceOfIssue,
+                    card_issue_date: data.NomineeIDIssueDate,
+                    card_expiry_date: data.NomineeIDExpiryDate,
+                });
+            })
+        );
+
+        // Respond to the client
         res.status(201).json({
-            message: 'Health insurance data stored successfully',
+            message: "Health insurance data stored successfully",
+            records: healthInsuranceRecords,
         });
     } catch (error) {
-        console.error("Error:", error.message);
-        res.status(500).json({ message: 'Server error' });
+        console.error("Error processing request:", error);
+        res.status(500).json({ message: "Server error", error });
     }
 };
-

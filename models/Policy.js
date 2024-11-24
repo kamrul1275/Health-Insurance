@@ -16,14 +16,5 @@ const Policy = sequelize.define('policies', {
 });
 
 
-// create database table
-
-// sequelize.sync({ force: true })
-//     .then(() => {
-//         console.log('Policy table has been created.');
-//     })
-//     .catch(error => {
-//         console.error('Unable to create table:', error);
-//     });
 
 module.exports = Policy;

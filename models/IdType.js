@@ -11,14 +11,26 @@ const IdType = sequelize.define('idtypes', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-        data_name: {
+    data_name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-        data_type: {
+    data_type: {
         type: DataTypes.STRING,
         allowNull: false
     },
+    issue_date: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    exp_date: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    issue_place: {
+        type: DataTypes.STRING,
+        allowNull: true
+    }
 }, {
     timestamps: false
 });

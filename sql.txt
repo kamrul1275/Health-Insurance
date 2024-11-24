@@ -4,16 +4,27 @@ Branch = INSERT INTO branches (branch_code)values('kh5001');
 Member = INSERT INTO members (member_name,contact_no,nomine_gender,date_birthday,branch_id)values('adil','01893335','1','12-12-1997','1');
 
 
-
-Category = INSERT INTO categories (title,premium_ammount_total,insurance_product_id,premium_installment,policy_tenure,policy_name,policy_id)values('Momota-CAT-1','680.00','1','90','12','Momota Shastho Bima','1');
-
-
-
-police= INSERT INTO policies (product_id,product_name)values('1','Momota Shastho Bima');
+police=  INSERT INTO policies (product_id,product_name)values('1','Momota Shastho Bima');
 
 
 
-Id type =   INSERT INTO idtypes (data_id,data_name,data_type)values('1','data one', 'cardTypeId');
+Category =    INSERT INTO categories (title,premium_ammount_total,insurance_product_id,premium_installment,policy_tenure,policy_name,policy_id)values('Momota-CAT-1','680.00','1','90','12','Momota Shastho Bima','1');
+
+
+policy_id search name
+
+LEFT JOIN = SELECT categories.title, categories.premium_ammount_total, categories.premium_installment, categories.policy_tenure, categories.policy_name, policies.product_name FROM categories  LEFT JOIN policies ON categories.id = categories.policy_id;
+
+
+
+
+Id type =   INSERT INTO idtypes (data_id,data_name,data_type,issue_place)values('2','National ID', 'cardTypeId','Bangladesh');    
+
+   issue_date ,
+
+exp_date:
+issue_place:
+
 
 
 SELECT * FROM idtypes where data_type='cardTypeId'
@@ -27,7 +38,7 @@ SELECT data_id,data_name FROM idtypes where data_type='cardTypeId'
 Relation =   SELECT data_id,data_name FROM idtypes where data_type='relationshipId'
 SELECT data_id,data_name FROM relationdata where data_type='relationshipId'
 
-Inser Relation:   INSERT INTO relationdata (data_id,data_name,data_type)values('1','data one', 'relationshipId');
+Insert Relation:   INSERT INTO relationdata (data_id,data_name,data_type)values('1','data one', 'relationshipId');
 
 
 

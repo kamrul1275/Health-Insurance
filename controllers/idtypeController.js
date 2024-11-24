@@ -1,30 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const IdType = require('../models/IdType');
-// const Member = require('../models/Member');
+const { Op } = require('sequelize');
 
-
-const { Op } = require('sequelize');// Adjust the path as necessary
 require('dotenv').config();
 
 
 // const idTypes = []; // This will act as our in-memory database for roles
 
 // Get all Branch
-exports.getIdTypes = async (req, res) => {
+
+async function getIdTypes(req, res) {
     try {
         const idTypes = await IdType.findAll({
+            attributes: ['data_id', 'data_name', 'issue_date', 'exp_date'],
             where: {
-            data_type: 'cardTypeId'
+                data_type: 'cardTypeId',
+                data_name: {
+                    [Op.in]: ['Passport', 'National ID']
+                }
             }
         });
-        console.log(idTypes);
-
         res.status(200).json(idTypes);
     } catch (error) {
-        console.log(error);
+        console.error('Error fetching IdTypes:', error);
         res.status(500).json({ error: error.message });
     }
+}
 
-
-};
+module.exports = { getIdTypes };

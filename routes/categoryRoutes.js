@@ -14,5 +14,7 @@ router.get('/category', categoryController.getCategory);
 // router.get('/category/:policy_id', categoryController.getCategoryWithPolicyId);
 
 // Updated route for getCategoryWithPolicyId
+// router.get('/category/:policy_id', categoryController.getCategoryWithPolicyId);
 router.get('/category/:policy_id', categoryController.getCategoryWithPolicyId);
+
 module.exports = router;

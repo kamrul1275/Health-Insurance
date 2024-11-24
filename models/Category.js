@@ -35,7 +35,7 @@ const Category = sequelize.define('categories', {
         type: DataTypes.INTEGER,
         references: {
             model: 'Policy',
-            key: 'id'
+            key: 'product_id'
         }
     }
 }, {
@@ -43,14 +43,5 @@ const Category = sequelize.define('categories', {
 });
 
 
-// create database table
-
-// sequelize.sync({ force: true })
-//     .then(() => {
-//         console.log('Category table has been created.');
-//     })
-//     .catch(error => {
-//         console.error('Unable to create table:', error);
-//     });
 
 module.exports = Category;

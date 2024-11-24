@@ -35,6 +35,7 @@ exports.getCategory = async (req, res) => {
 
 
 
+
 exports.getCategoryWithPolicyId = async (req, res) => {
     const { policy_id } = req.params; // Extract policy_id from req.params
     console.log("policy_id", policy_id);
@@ -48,7 +49,7 @@ exports.getCategoryWithPolicyId = async (req, res) => {
                 'policy_tenure', 'policy_name', 'policy_id'],
             include: [{
                 model: Policy,
-                attributes: ['id', 'product_name'], // Update this line
+                attributes: ['product_id', 'product_name'], // Correctly reference the attributes
                 required: false // This will create a LEFT JOIN
             }]
         });
