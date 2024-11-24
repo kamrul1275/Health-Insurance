@@ -95,11 +95,11 @@ const HealthInsurance = sequelize.define('health_insurance', {
         allowNull: true
     },
     nominee_id_front: {
-        type: DataTypes.BLOB('long'), // Store image buffer
+        type: DataTypes.STRING, // Store image buffer
         allowNull: true
     },
     nominee_id_back: {
-        type: DataTypes.BLOB('long'), // Store image buffer
+        type: DataTypes.STRING, // Store image buffer
         allowNull: true
     },
     card_issue_country: {

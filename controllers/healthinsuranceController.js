@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const fs = require('fs');
 const HealthInsurance = require('../models/HealthInsurance');
 const { Op } = require('sequelize');// Adjust the path as necessary
 require('dotenv').config();
@@ -56,6 +57,11 @@ exports.getHealthInsurance = async (req, res) => {
     }
 };
 
+
+
+
+
+
 exports.storeHealthInsurance = async (req, res) => {
     try {
         const {
@@ -93,6 +99,44 @@ exports.storeHealthInsurance = async (req, res) => {
         const healthInsuranceData = JSON.parse(HealthInsuranceJson);
 
         // Iterate over the HealthInsuranceJson array and insert each entry
+        // const imageDataFront = fs.readFileSync(nomineeImageFront.path);
+        // const imageDataBackend = fs.readFileSync(nomineeImageBack.path);
+
+        // save this images with unique name in uploads folder
+        // generate unique name for image nomineeImageFront and nomineeImageBack
+        const nomineeImageFrontName = Date.now() + nomineeImageFront.originalname;
+        const nomineeImageBackName = Date.now() + nomineeImageBack.originalname;
+
+        // Ensure the uploads directory exists
+        if (!fs.existsSync('uploads')) {
+            fs.mkdirSync('uploads');
+        }
+
+        // Save the images with unique names in the uploads folder
+        const nomineeImageFrontPath = 'uploads/' + nomineeImageFrontName;
+        const nomineeImageBackPath = 'uploads/' + nomineeImageBackName;
+
+
+// if the file is already exist  then at extra time stamp to the file name
+        if (fs.existsSync(nomineeImageFrontPath)) {
+            const timestamp = Date.now();
+            nomineeImageFrontName = timestamp + nomineeImageFront.originalname;
+        }
+        if (fs.existsSync(nomineeImageBackPath)) {
+            const timestamp = Date.now();
+            nomineeImageBackName = timestamp + nomineeImageBack.originalname;
+        }
+
+
+
+
+        fs.writeFileSync(nomineeImageFrontPath, fs.readFileSync(nomineeImageFront.path));
+        fs.writeFileSync(nomineeImageBackPath, fs.readFileSync(nomineeImageBack.path));
+
+
+
+
+
         const healthInsuranceRecords = await Promise.all(
             healthInsuranceData.map(async (data) => {
                 return HealthInsurance.create({
@@ -117,14 +161,32 @@ exports.storeHealthInsurance = async (req, res) => {
                     erp_member_id: data.ErpMemId,
                     project_code: data.ProjectCode,
                     contact_no: data.Phone,
-                    nominee_id_front: nomineeImageFront ? nomineeImageFront.buffer : null, // Save image buffer
-                    nominee_id_back: nomineeImageBack ? nomineeImageBack.buffer : null, // Save image buffer
+                    // nominee_id_front: nomineeImageFront ? nomineeImageFront.buffer : null, // Save image buffer
+                    nominee_id_front: nomineeImageFrontName,
+                    // nominee_id_back: nomineeImageBack ? nomineeImageBack.buffer : null, // Save image buffer
+                    nominee_id_back: nomineeImageBackName,
                     card_issue_country: data.NomineeIDPlaceOfIssue,
                     card_issue_date: data.NomineeIDIssueDate,
                     card_expiry_date: data.NomineeIDExpiryDate,
                 });
             })
         );
+          
+        // need to convert binary data to image file
+        // const base64Data = nomineeImageFront.buffer.toString('base64');
+        // fs.writeFileSync('uploads/nomineeImageFront.jpg', base64Data, 'base64');
+        // const base64DataBack = nomineeImageBack.buffer.toString('base64');
+        // fs.writeFileSync('uploads/nomineeImageBack.jpg', base64DataBack, 'base64');
+
+        // healthInsuranceRecords.forEach((record) => {
+        //     // Log the record
+        //     // console.log("Record saved:", record.toJSON());
+        //     record.nominee_id_front = `/uploads/${record.nominee_id_front}`;
+        //     record.nominee_id_back = `/uploads/${record.nominee_id_back}`;
+            
+        // });
+
+
 
         // Respond to the client
         res.status(201).json({

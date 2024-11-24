@@ -4,6 +4,7 @@ const sequelize = require('./config/db'); // Adjust the path as necessary
 const User = require('./models/User'); // Adjust the path as necessary
 const Role = require('./models/Role'); // Adjust the path as necessary
 const { Branch, Member } = require('./models/associations');  // Import associations
+const path = require("path");
 const multer = require('multer');
 const bodyParser = require("body-parser");
 
@@ -41,6 +42,8 @@ const healthInsuranceRoute = require('./routes/healthInsuranceRoutes');
 
 
 
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // User Authentication
 app.use('/api/auth', authRoute);
