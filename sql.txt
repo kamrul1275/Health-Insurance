@@ -8,7 +8,9 @@ police=  INSERT INTO policies (product_id,product_name)values('1','Momota Shasth
 
 
 
-Category =    INSERT INTO categories (title,premium_ammount_total,insurance_product_id,premium_installment,policy_tenure,policy_name,policy_id)values('Momota-CAT-1','680.00','1','90','12','Momota Shastho Bima','1');
+Category =    INSERT INTO categories(title,premium_ammount_total,insurance_product_id,premium_installment,policy_tenure,policy_name,policy_id)values('Momota-CAT-1','680.00','1','90','12','Momota Shastho Bima','1');
+
+*  Shurokha-CAT-1
 
 
 policy_id search name
@@ -18,7 +20,11 @@ LEFT JOIN = SELECT categories.title, categories.premium_ammount_total, categorie
 
 
 
-Id type =   INSERT INTO idtypes (data_id,data_name,data_type,issue_place)values('2','National ID', 'cardTypeId','Bangladesh');    
+Id type =   INSERT INTO idtypes (data_id,data_name,data_type,issue_place)values('2','National ID', 'cardTypeId','Bangladesh');  
+
+  **  Birth Certificate ,
+
+** Passport
 
    issue_date ,
 
@@ -38,7 +44,7 @@ SELECT data_id,data_name FROM idtypes where data_type='cardTypeId'
 Relation =   SELECT data_id,data_name FROM idtypes where data_type='relationshipId'
 SELECT data_id,data_name FROM relationdata where data_type='relationshipId'
 
-Insert Relation:   INSERT INTO relationdata (data_id,data_name,data_type)values('1','data one', 'relationshipId');
+Insert Relation:   INSERT INTO relationdata (data_id,data_name,data_type)values('2','GrandSister', 'relationshipId');
 
 
 

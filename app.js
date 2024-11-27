@@ -36,6 +36,7 @@ const categoryRoute = require('./routes/categoryRoutes');
 const idtypeRoutes = require('./routes/idtypeRoutes');
 const relationdataRoutes = require('./routes/relationdataRoutes');
 const healthInsuranceRoute = require('./routes/healthInsuranceRoutes');
+const moduleRoutes = require('./routes/moduleRoutes');
 
 
 
@@ -74,9 +75,19 @@ app.use('/api', relationdataRoutes);
 //Health Insurance 
 app.use('/api', healthInsuranceRoute);
 
+// Module Routes
+app.use('/api', moduleRoutes);
+
 
 
 // Start the server
+// sequelize.sync({ force: true })
+//     .then(() => {
+//         console.log(' table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table:', error);
+//     });
 
 // const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -125,12 +125,12 @@ const HealthInsurance = sequelize.define('health_insurance', {
 
 
 
-sequelize.sync({ force: true })
-    .then(() => {
-        console.log('Health table has been created.');
-    })
-    .catch(error => {
-        console.error('Unable to create table:', error);
-    });
+// sequelize.sync({ force: true })
+//     .then(() => {
+//         console.log('Health table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table:', error);
+//     });
 
 module.exports = HealthInsurance;

@@ -14,7 +14,6 @@ let tokenBlacklist = [];
 
 
 
-// User registration
 // Define the register function
 exports.register = async (req, res) => {
     const { name, username, email, password } = req.body;
@@ -61,67 +60,11 @@ exports.register = async (req, res) => {
         console.error(error.message);
         res.status(500).json({ message: 'Server error' });
     }
-};
+};//end of register function
 
 
 
 // Define the login function
-
-// exports.login = async (req, res) => {
-
-//     const { email, password } = req.body;
-
-//     // Validate input data
-//     if (!email || !password) {
-//         return res.status(400).json({ message: 'Please provide all required fields' });
-//     }
-
-//     try {
-//         // Check if the user exists
-//         const user = await User.findOne({ where: { email } });
-//         if (!user) {
-//             return res.status(400).json({ message: 'Invalid credentials' });
-//         }
-
-//         // Check if the password is correct
-//         const isMatch = await bcrypt.compare(password, user.password);
-//         if (!isMatch) {
-//             return res.status(400).json({ message: 'Invalid credentials' });
-//         }
-
-//         // Create a token
-//         const payload = {
-//             user: {
-//                 id: user.id,
-//                 role_type: user.role_type // Include role_type in the payload
-//             },
-
-
-
-//         };
-
-
-
-
-
-//         jwt.sign(payload, process.env.JWT_PRIVATE_KEY, { expiresIn: '1h' }, (error, token) => {
-
-//             if (error) throw error;
-
-//             res.status(200).json({
-//                 message: 'Login Successfully',
-//                 success: true,
-//                 token: token,
-//                 role_type: user.role_type
-//             });
-//         });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// };//end of login function
-
-
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -156,16 +99,6 @@ exports.login = async (req, res) => {
                         model: Module,
                         as: 'module',
                         attributes: ['moduleName'] // Adjust the attribute name as per your Module model
-                    },
-                    {
-                        model: Role,
-                        as: 'role',
-                        attributes: ['roleName'] // Adjust the attribute name as per your Role model
-                    },
-                    {
-                        model: User,
-                        as: 'createByUser',
-                        attributes: ['name'] // Adjust the attribute name as per your User model
                     }
                 ]
             });
@@ -190,26 +123,28 @@ exports.login = async (req, res) => {
                     id: role.id,
                     roleName: role.roleName
                 } : null,
-                permissions: permissions
+                permissions: permissions.map(permission => ({
+                    id: permission.id,
+                    canCreate: permission.canCreate,
+                    canGetList: permission.canGetList,
+                    canGetOne: permission.canGetOne,
+                    canUpdate: permission.canUpdate,
+                    canDelete: permission.canDelete,
+                    module: permission.module ? permission.module.moduleName : null
+                }))
             });
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
-};
-// Define the dashboard function
+};//end of login function
+
+
+
+
 
 // Define the getUsers function
-// exports.getUsers = async (req, res) => {
-//     try {
-//         const users = await User.findAll();
-//         res.status(200).json(users);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// };//end of getUsers function
 
 exports.getUsers = async (req, res) => {
     const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
@@ -236,6 +171,8 @@ exports.getUsers = async (req, res) => {
 
 
 
+
+
 // // Define the getUserById function
 exports.getUserById = async (req, res) => {
     const id = req.params.id;
@@ -255,7 +192,7 @@ exports.getUserById = async (req, res) => {
 
 
 
-
+// Define the searchUsers function
 exports.searchUsers = async (req, res) => {
     const search = req.query.search || ''; // Extract search query parameter
 
@@ -344,7 +281,7 @@ exports.deleteUser = async (req, res) => {
 
 
 
-
+// Define the logout function
 exports.logout = async (req, res) => {
     const token = req.headers.authorization;
     if (!token) {

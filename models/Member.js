@@ -2,6 +2,11 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
 const Member = sequelize.define('members', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     member_name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -36,14 +41,14 @@ const Member = sequelize.define('members', {
         type: DataTypes.DATE,
         allowNull: false,
     },
-    branch_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'Branch',  // Use the table name as a string to avoid circular dependency
-            key: 'id'
-        }
-    }
+    // branch_id: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: true,
+    //     references: {
+    //         model: 'Branch',  // Use the table name as a string to avoid circular dependency
+    //         key: 'id'
+    //     }
+    // }
 }, {
     timestamps: false,  // Disable timestamps
 });

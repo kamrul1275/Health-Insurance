@@ -38,14 +38,14 @@ const Permission = sequelize.define('Permission', {
         allowNull: false,
         unique: false,
     },
-    createBy: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: User,
-            key: 'id'
-        }
-    },
+    // createBy: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: false,
+    //     references: {
+    //         model: User,
+    //         key: 'id'
+    //     }
+    // },
 
 
     roleId: {

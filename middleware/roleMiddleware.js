@@ -1,5 +1,10 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const express = require('express');
+const app = express();
+
+// Ensure you have body parsing middleware
+app.use(express.json());
 
 const roleMiddleware = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');

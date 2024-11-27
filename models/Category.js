@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const Policy = require('./Policy');
 
 const Category = sequelize.define('categories', {
     id: {
@@ -31,17 +32,17 @@ const Category = sequelize.define('categories', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    policy_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: 'Policy',
-            key: 'product_id'
-        }
-    }
+    // policy_id: {
+    //     type: DataTypes.INTEGER,
+    //     references: {
+    //         model: 'Policy',
+    //         key: 'product_id'
+    //     }
+    // }
 }, {
     timestamps: false
 });
 
-
+Category.belongsTo(Policy, { foreignKey: 'policy_id' });
 
 module.exports = Category;

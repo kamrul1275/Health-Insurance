@@ -2,6 +2,10 @@ const express = require('express');
 const roleController = require('../controllers/roleController');
 const roleMiddleware = require('../middleware/roleMiddleware');
 // const authMiddleware = require('../middleware/authMiddleware');
+
+// // Ensure you have body parsing middleware
+// app.use(express.json());
+
 const multer = require('multer');
 // const upload = multer(); // Initialize multer
 // Set up multer for file uploads
@@ -19,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 router.get('/roles', roleMiddleware, roleController.getRoles);
-router.get('/role/create', roleMiddleware, roleController.create);
+router.post('/role/create',upload.none(), roleController.create);
 router.get('/role/edit/:id', roleMiddleware, roleController.getRoleById);
 router.put('/role/update/:id', upload.none(), roleMiddleware, roleController.updateRole); // Use multer for form-data
 router.delete('/role/delete/:id', roleMiddleware, roleController.deleteRole);

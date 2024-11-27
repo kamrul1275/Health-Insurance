@@ -24,9 +24,9 @@ const User = sequelize.define('User', {
         allowNull: false
     },
     role_type: {
-        type: DataTypes.ENUM('admin', 'user', 'guest'),
+        type: DataTypes.ENUM('admin', 'user', 'guest','superadmin'),
         allowNull: false,
-        defaultValue: 'admin'
+        defaultValue: 'user'
     },
     phone: {
         type: DataTypes.STRING,
@@ -57,5 +57,17 @@ User.associate = function (models) {
     User.belongsTo(models.Role, { foreignKey: 'roleId' });
     models.Role.hasMany(User, { foreignKey: 'roleId' });
 };
+
+
+// create database table
+
+// sequelize.sync({ force: true })
+//     .then(() => {
+//         console.log('User table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table:', error);
+//     });
+
 
 module.exports = User;
